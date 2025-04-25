@@ -46,40 +46,40 @@ public class LearningController {
         
         // Tutorial completion template
         Map<String, Object> tutorialTemplate = new HashMap<>();
-        tutorialTemplate.put("title", "Completed a Tutorial");
+        tutorialTemplate.put("title", "Logged a Meal");
         tutorialTemplate.put("category", "TUTORIAL");
         tutorialTemplate.put("fields", List.of(
-            Map.of("name", "resourceName", "label", "Tutorial Name", "type", "text", "required", true),
-            Map.of("name", "description", "label", "What did you learn?", "type", "textarea", "required", false),
-            Map.of("name", "skillsLearned", "label", "Skills Learned", "type", "tags", "required", true),
-            Map.of("name", "hoursSpent", "label", "Hours Spent", "type", "number", "required", true),
-            Map.of("name", "difficulty", "label", "Difficulty Level", "type", "select", "options", 
+            Map.of("name", "resourceName", "label", "Meal Name", "type", "text", "required", true),
+            Map.of("name", "description", "label", "What did you eat?", "type", "textarea", "required", false),
+            Map.of("name", "skillsLearned", "label", "Nutrients Included", "type", "tags", "required", true),
+            Map.of("name", "hoursSpent", "label", "Time Taken to Prepare", "type", "number", "required", true),
+            Map.of("name", "difficulty", "label", "Meal Preparation Level", "type", "select", "options", 
                   List.of("BEGINNER", "INTERMEDIATE", "ADVANCED"), "required", true)
         ));
         
         // Course completion template
         Map<String, Object> courseTemplate = new HashMap<>();
-        courseTemplate.put("title", "Completed a Course");
+        courseTemplate.put("title", "Tried a New Recipe");
         courseTemplate.put("category", "COURSE");
         courseTemplate.put("fields", List.of(
-            Map.of("name", "resourceName", "label", "Course Name", "type", "text", "required", true),
-            Map.of("name", "description", "label", "What did you learn?", "type", "textarea", "required", false),
-            Map.of("name", "skillsLearned", "label", "Skills Learned", "type", "tags", "required", true),
-            Map.of("name", "hoursSpent", "label", "Hours Spent", "type", "number", "required", true),
-            Map.of("name", "difficulty", "label", "Difficulty Level", "type", "select", "options", 
+            Map.of("name", "resourceName", "label", "Recipe Name ", "type", "text", "required", true),
+            Map.of("name", "description", "label", "How did you make it?", "type", "textarea", "required", false),
+            Map.of("name", "skillsLearned", "label", "Nutrients Included", "type", "tags", "required", true),
+            Map.of("name", "hoursSpent", "label", "Time Spent Cooking", "type", "number", "required", true),
+            Map.of("name", "difficulty", "label", "Recipe Difficulty Level", "type", "select", "options", 
                   List.of("BEGINNER", "INTERMEDIATE", "ADVANCED"), "required", true)
         ));
         
         // Project completion template
         Map<String, Object> projectTemplate = new HashMap<>();
-        projectTemplate.put("title", "Completed a Project");
+        projectTemplate.put("title", "Meal Prepped");
         projectTemplate.put("category", "PROJECT");
         projectTemplate.put("fields", List.of(
-            Map.of("name", "resourceName", "label", "Project Name", "type", "text", "required", true),
-            Map.of("name", "description", "label", "Describe your project", "type", "textarea", "required", true),
-            Map.of("name", "skillsLearned", "label", "Skills Applied/Learned", "type", "tags", "required", true),
-            Map.of("name", "hoursSpent", "label", "Hours Spent", "type", "number", "required", true),
-            Map.of("name", "difficulty", "label", "Difficulty Level", "type", "select", "options", 
+            Map.of("name", "resourceName", "label", "Meal Prep Title", "type", "text", "required", true),
+            Map.of("name", "description", "label", "What meals did you prep?", "type", "textarea", "required", true),
+            Map.of("name", "skillsLearned", "label", "Nutrients Included", "type", "tags", "required", true),
+            Map.of("name", "hoursSpent", "label", "Total Prep Time", "type", "number", "required", true),
+            Map.of("name", "difficulty", "label", "Meal Prep Skill Level", "type", "select", "options", 
                   List.of("BEGINNER", "INTERMEDIATE", "ADVANCED"), "required", true)
         ));
         
