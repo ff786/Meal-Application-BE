@@ -11,6 +11,15 @@ public class LearningPlanDTO {
     private String id;
 
     @NotBlank(message = "Title is required")
+    private String age;
+
+    private String gender;
+
+    private String height;
+
+    private String weight;
+    
+
     private String title;
 
     private String description;
