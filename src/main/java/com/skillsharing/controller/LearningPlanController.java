@@ -67,6 +67,12 @@ public class LearningPlanController {
         LearningPlan existingPlan = optionalPlan.get();
         existingPlan.setTitle(updatedPlan.getTitle());
         existingPlan.setDescription(updatedPlan.getDescription());
+
+        existingPlan.setAge(updatedPlan.getAge());
+        existingPlan.setGender(updatedPlan.getGender());
+        existingPlan.setHeight(updatedPlan.getHeight());
+        existingPlan.setWeight(updatedPlan.getWeight());
+
         existingPlan.setWeeks(updatedPlan.getWeeks());
 
         LearningPlan savedPlan = learningPlanRepository.save(existingPlan);
@@ -113,6 +119,12 @@ public class LearningPlanController {
         newPlan.setUserId(currentUser.getId());
         newPlan.setTitle(originalPlan.getTitle());
         newPlan.setDescription(originalPlan.getDescription());
+
+        newPlan.setAge(originalPlan.getAge());
+        newPlan.setGender(originalPlan.getGender());
+        newPlan.setHeight(originalPlan.getHeight());
+        newPlan.setWeight(originalPlan.getWeight());
+
         newPlan.setResources(originalPlan.getResources());
         newPlan.setWeeks(copyWeeksWithResetStatus(originalPlan.getWeeks()));
         newPlan.setSourcePlanId(planId);
@@ -130,6 +142,7 @@ public class LearningPlanController {
             Week newWeek = new Week();
             newWeek.setTitle(week.getTitle());
             newWeek.setDescription(week.getDescription());
+
             newWeek.setStatus("Not Started");
             newWeeks.add(newWeek);
         }

@@ -28,6 +28,7 @@ public class Week {
     public void setDescription(String description) {
         this.description = description;
     }
+
     public String getStatus() {
         return status;
     }
