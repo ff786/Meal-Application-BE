@@ -31,6 +31,12 @@ public class LearningPlanService {
         LearningPlan learningPlan = new LearningPlan();
         learningPlan.setTitle(learningPlanDTO.getTitle());
         learningPlan.setDescription(learningPlanDTO.getDescription());
+
+        learningPlan.setAge(learningPlanDTO.getAge());
+        learningPlan.setGender(learningPlanDTO.getGender());
+        learningPlan.setHeight(learningPlanDTO.getHeight());
+        learningPlan.setWeight(learningPlanDTO.getWeight());
+
         learningPlan.setResources(
             learningPlanDTO.getResources().stream()
                 .map(resourceDTO -> {
@@ -47,6 +53,7 @@ public class LearningPlanService {
                     Week week = new Week();
                     week.setTitle(weekDTO.getTitle());
                     week.setDescription(weekDTO.getDescription());
+
                     return week;
                 })
                 .toList()
@@ -84,6 +91,7 @@ public class LearningPlanService {
                                 Week week = new Week();
                                 week.setTitle(weekDTO.getTitle());
                                 week.setDescription(weekDTO.getDescription());
+
                                 return week;
                             })
                             .toList()
