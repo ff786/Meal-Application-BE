@@ -14,8 +14,8 @@
     <groupId>com.skillsharing</groupId>
     <artifactId>skill-sharing-platform</artifactId>
     <version>1.0.0</version>
-    <name>Skill Sharing Platform</name>
-    <description>A platform for sharing coding skills and learning resources</description>
+    <name>Meal Plan Mastery Hub</name>
+    <description>A platform for sharing cooking skills and meal planing resources</description>
 
     <properties>
         <java.version>17</java.version>

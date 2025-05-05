@@ -14,16 +14,16 @@ import org.springframework.web.bind.annotation.*;
 import java.util.*;
 
 @RestController
-@RequestMapping("/learning-plan")
+@RequestMapping("/meal-plan")
 @RequiredArgsConstructor
 public class MealPlanController {
 
-    private final MealPlanRepository learningPlanRepository;
+    private final MealPlanRepository mealPlanRepository;
     private final UserRepository userRepository;
 
     // Add a new mealing plan
     @PostMapping
-    public ResponseEntity<?> createLearningPlan(@RequestBody MealPlan plan) {
+    public ResponseEntity<?> createMealPlan(@RequestBody MealPlan plan) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String email = authentication.getName();
 
@@ -31,35 +31,35 @@ public class MealPlanController {
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
         plan.setUserId(currentUser.getId());
-        MealPlan savedPlan = learningPlanRepository.save(plan);
+        MealPlan savedPlan = mealPlanRepository.save(plan);
         return ResponseEntity.ok(savedPlan);
     }
 
     // Get all mealing plans (admin or for viewing/testing)
     @GetMapping
-    public ResponseEntity<List<MealPlan>> getAllLearningPlans() {
-        List<MealPlan> allPlans = learningPlanRepository.findAll();
+    public ResponseEntity<List<MealPlan>> getAllMealPlans() {
+        List<MealPlan> allPlans = mealPlanRepository.findAll();
         return ResponseEntity.ok(allPlans);
     }
 
     // Get all plans for a user
     @GetMapping("/user/{userId}")
     public ResponseEntity<List<MealPlan>> getPlansForUser(@PathVariable String userId) {
-        List<MealPlan> plans = learningPlanRepository.findByUserId(userId);
+        List<MealPlan> plans = mealPlanRepository.findByUserId(userId);
         return ResponseEntity.ok(plans);
     }
 
     // Get a specific plan by ID
     @GetMapping("/{planId}")
     public ResponseEntity<?> getPlanById(@PathVariable String planId) {
-        Optional<MealPlan> optionalPlan = learningPlanRepository.findById(planId);
+        Optional<MealPlan> optionalPlan = mealPlanRepository.findById(planId);
         return optionalPlan.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     // Update a mealing plan
     @PutMapping("/{planId}")
-    public ResponseEntity<?> updateLearningPlan(@PathVariable String planId, @RequestBody MealPlan updatedPlan) {
-        Optional<MealPlan> optionalPlan = learningPlanRepository.findById(planId);
+    public ResponseEntity<?> updateMealPlan(@PathVariable String planId, @RequestBody MealPlan updatedPlan) {
+        Optional<MealPlan> optionalPlan = mealPlanRepository.findById(planId);
         if (optionalPlan.isEmpty()) {
             return ResponseEntity.notFound().build();
         }
@@ -75,30 +75,30 @@ public class MealPlanController {
 
         existingPlan.setWeeks(updatedPlan.getWeeks());
 
-        MealPlan savedPlan = learningPlanRepository.save(existingPlan);
+        MealPlan savedPlan = mealPlanRepository.save(existingPlan);
         return ResponseEntity.ok(savedPlan);
     }
 
     // Delete a mealing plan
     @DeleteMapping("/{planId}")
-    public ResponseEntity<?> deleteLearningPlan(@PathVariable String planId) {
-        if (!learningPlanRepository.existsById(planId)) {
+    public ResponseEntity<?> deleteMealPlan(@PathVariable String planId) {
+        if (!mealPlanRepository.existsById(planId)) {
             return ResponseEntity.notFound().build();
         }
 
-        learningPlanRepository.deleteById(planId);
+        mealPlanRepository.deleteById(planId);
         return ResponseEntity.ok(Map.of("message", "Mealing plan deleted successfully"));
     }
 
     @PostMapping("/follow/{planId}")
-    public ResponseEntity<?> followLearningPlan(@PathVariable String planId) {
+    public ResponseEntity<?> followMealPlan(@PathVariable String planId) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String email = authentication.getName();
     
         User currentUser = userRepository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("User not found"));
     
-        Optional<MealPlan> optionalPlan = learningPlanRepository.findById(planId);
+        Optional<MealPlan> optionalPlan = mealPlanRepository.findById(planId);
         if (optionalPlan.isEmpty()) {
             return ResponseEntity.notFound().build();
         }
@@ -110,7 +110,7 @@ public class MealPlanController {
         }
     
         // Check if already followed
-        boolean alreadyFollowed = learningPlanRepository.existsByUserIdAndSourcePlanId(currentUser.getId(), planId);
+        boolean alreadyFollowed = mealPlanRepository.existsByUserIdAndSourcePlanId(currentUser.getId(), planId);
         if (alreadyFollowed) {
             return ResponseEntity.badRequest().body(Map.of("error", "You have already followed this mealing plan"));
         }
@@ -129,7 +129,7 @@ public class MealPlanController {
         newPlan.setWeeks(copyWeeksWithResetStatus(originalPlan.getWeeks()));
         newPlan.setSourcePlanId(planId);
     
-        MealPlan savedPlan = learningPlanRepository.save(newPlan);
+        MealPlan savedPlan = mealPlanRepository.save(newPlan);
         return ResponseEntity.ok(Map.of("message", "Mealing plan followed successfully", "planId", savedPlan.getId()));
     }
     

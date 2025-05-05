@@ -34,11 +34,11 @@ public class User {
     private Set<String> following = new HashSet<>();
     private boolean enabled = true;
     
-    // Learning streak fields
+    // Planing streak fields
     private int currentStreak = 0;
     private int longestStreak = 0;
-    private LocalDate lastLearningDate;
-    private Set<LocalDate> learningDates = new HashSet<>();
+    private LocalDate lastPlaningDate;
+    private Set<LocalDate> planingDates = new HashSet<>();
     
     // Helper method to get full name
     public String getFullName() {

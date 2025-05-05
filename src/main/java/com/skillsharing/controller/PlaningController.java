@@ -31,17 +31,17 @@ import com.skillsharing.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 
 @RestController
-@RequestMapping("/learning")
+@RequestMapping("/planing")
 @RequiredArgsConstructor
 public class PlaningController {
     
     private static final Logger logger = LoggerFactory.getLogger(PlaningController.class);
-    private final PlaningRepository learningUpdateRepository;
+    private final PlaningRepository planingUpdateRepository;
     private final UserRepository userRepository;
     
-    // Get learning update templates
+    // Get planing update templates
     @GetMapping("/templates")
-    public ResponseEntity<?> getLearningTemplates() {
+    public ResponseEntity<?> getPlaningTemplates() {
         Map<String, Object> response = new HashMap<>();
         
         // Tutorial completion template
@@ -90,18 +90,18 @@ public class PlaningController {
     
     // Add a mealing update
     @PostMapping("/updates")
-    public ResponseEntity<?> addLearningUpdate(@RequestBody PlaningUpdate learningUpdate) {
+    public ResponseEntity<?> addPlaningUpdate(@RequestBody PlaningUpdate planingUpdate) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String email = authentication.getName();
         
         User currentUser = userRepository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("User not found"));
         
-        learningUpdate.setUserId(currentUser.getId());
-        learningUpdate.setCreatedAt(LocalDateTime.now());
+        planingUpdate.setUserId(currentUser.getId());
+        planingUpdate.setCreatedAt(LocalDateTime.now());
         
-        if (learningUpdate.getCompletedAt() == null) {
-            learningUpdate.setCompletedAt(LocalDateTime.now());
+        if (planingUpdate.getCompletedAt() == null) {
+            planingUpdate.setCompletedAt(LocalDateTime.now());
         }
         
         // Initialize skills if null
@@ -110,8 +110,8 @@ public class PlaningController {
         }
         
         // Update user's skills with newly learned skills
-        if (learningUpdate.getSkillsLearned() != null && !learningUpdate.getSkillsLearned().isEmpty()) {
-            for (String skill : learningUpdate.getSkillsLearned()) {
+        if (planingUpdate.getSkillsLearned() != null && !planingUpdate.getSkillsLearned().isEmpty()) {
+            for (String skill : planingUpdate.getSkillsLearned()) {
                 if (!currentUser.getSkills().contains(skill)) {
                     currentUser.getSkills().add(skill);
                 }
@@ -119,49 +119,49 @@ public class PlaningController {
         }
         
         // Update streak information
-        updateLearningStreak(currentUser, learningUpdate.getCompletedAt().toLocalDate());
+        updatePlaningStreak(currentUser, planingUpdate.getCompletedAt().toLocalDate());
         userRepository.save(currentUser);
         
-        PlaningUpdate savedUpdate = learningUpdateRepository.save(learningUpdate);
+        PlaningUpdate savedUpdate = planingUpdateRepository.save(planingUpdate);
         
         Map<String, Object> response = new HashMap<>();
-        response.put("learningUpdate", savedUpdate);
+        response.put("planingUpdate", savedUpdate);
         response.put("user", currentUser); // Return updated user with new skills and streak
         
         return ResponseEntity.ok(response);
     }
     
     // Helper method to update mealing streak
-    private void updateLearningStreak(User user, LocalDate learningDate) {
-        // Initialize learning dates set if null
-        if (user.getLearningDates() == null) {
-            user.setLearningDates(new HashSet<>());
+    private void updatePlaningStreak(User user, LocalDate planingDate) {
+        // Initialize palning dates set if null
+        if (user.getPlaningDates() == null) {
+            user.setPlaningDates(new HashSet<>());
         }
         
         // If this date was already recorded, no need to update streak
-        if (user.getLearningDates().contains(learningDate)) {
+        if (user.getPlaningDates().contains(planingDate)) {
             return;
         }
         
         // Add this date to mealing dates
-        user.getLearningDates().add(learningDate);
+        user.getPlaningDates().add(planingDate);
         
         LocalDate today = LocalDate.now();
         LocalDate yesterday = today.minusDays(1);
         
         // If this is the first mealing activity or if the last mealing was more than a day ago
-        if (user.getLastLearningDate() == null) {
+        if (user.getLastPlaningDate() == null) {
             user.setCurrentStreak(1);
-            user.setLastLearningDate(learningDate);
-        } else if (user.getLastLearningDate().equals(yesterday) || 
-                   user.getLastLearningDate().equals(today)) {
+            user.setLastPlaningDate(planingDate);
+        } else if (user.getLastPlaningDate().equals(yesterday) || 
+                   user.getLastPlaningDate().equals(today)) {
             // Increment streak if last activity was yesterday or today
             user.setCurrentStreak(user.getCurrentStreak() + 1);
-            user.setLastLearningDate(learningDate);
-        } else if (learningDate.isAfter(user.getLastLearningDate())) {
+            user.setLastPlaningDate(planingDate);
+        } else if (planingDate.isAfter(user.getLastPlaningDate())) {
             // Reset streak if there's a gap
             user.setCurrentStreak(1);
-            user.setLastLearningDate(learningDate);
+            user.setLastPlaningDate(planingDate);
         }
         
         // Update longest streak if current streak is longer
@@ -172,21 +172,21 @@ public class PlaningController {
     
     // Get mealing updates for a user
     @GetMapping("/updates/user/{userId}")
-    public ResponseEntity<List<PlaningUpdate>> getUserLearningUpdates(@PathVariable String userId) {
-        List<PlaningUpdate> updates = learningUpdateRepository.findByUserIdOrderByCompletedAtDesc(userId);
+    public ResponseEntity<List<PlaningUpdate>> getUserPlaningUpdates(@PathVariable String userId) {
+        List<PlaningUpdate> updates = planingUpdateRepository.findByUserIdOrderByCompletedAtDesc(userId);
         return ResponseEntity.ok(updates);
     }
     
     // Delete a mealing update
     @DeleteMapping("/updates/{updateId}")
-    public ResponseEntity<?> deleteLearningUpdate(@PathVariable String updateId) {
+    public ResponseEntity<?> deletePlaningUpdate(@PathVariable String updateId) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String email = authentication.getName();
         
         User currentUser = userRepository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("User not found"));
         
-        Optional<PlaningUpdate> updateOpt = learningUpdateRepository.findById(updateId);
+        Optional<PlaningUpdate> updateOpt = planingUpdateRepository.findById(updateId);
         
         if (updateOpt.isEmpty()) {
             return ResponseEntity.notFound().build();
@@ -199,17 +199,17 @@ public class PlaningController {
             return ResponseEntity.status(403).body("You are not authorized to delete this mealing plan update");
         }
         
-        learningUpdateRepository.delete(update);
+        planingUpdateRepository.delete(update);
         
         Map<String, String> response = new HashMap<>();
-        response.put("message", "Learning update deleted successfully");
+        response.put("message", "Meal Plan update deleted successfully");
         
         return ResponseEntity.ok(response);
     }
     
     // Update a mealing update
     @PutMapping("/updates/{updateId}")
-    public ResponseEntity<?> updateLearningUpdate(
+    public ResponseEntity<?> updatePlaningUpdate(
             @PathVariable String updateId,
             @RequestBody PlaningUpdate updatedData) {
         
@@ -219,7 +219,7 @@ public class PlaningController {
         User currentUser = userRepository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("User not found"));
         
-        Optional<PlaningUpdate> updateOpt = learningUpdateRepository.findById(updateId);
+        Optional<PlaningUpdate> updateOpt = planingUpdateRepository.findById(updateId);
         
         if (updateOpt.isEmpty()) {
             return ResponseEntity.notFound().build();
@@ -266,14 +266,14 @@ public class PlaningController {
                 userRepository.save(currentUser);
             }
             
-            // Update the learning update skills
+            // Update the meal plan update skills
             existingUpdate.setSkillsLearned(updatedData.getSkillsLearned());
         }
         
-        PlaningUpdate savedUpdate = learningUpdateRepository.save(existingUpdate);
+        PlaningUpdate savedUpdate = planingUpdateRepository.save(existingUpdate);
         
         Map<String, Object> response = new HashMap<>();
-        response.put("learningUpdate", savedUpdate);
+        response.put("planingUpdate", savedUpdate);
         response.put("user", currentUser); // Return updated user with any new skills
         
         return ResponseEntity.ok(response);
@@ -293,23 +293,23 @@ public class PlaningController {
         Map<String, Object> response = new HashMap<>();
         response.put("currentStreak", user.getCurrentStreak());
         response.put("longestStreak", user.getLongestStreak());
-        response.put("lastLearningDate", user.getLastLearningDate());
+        response.put("lastPlaningDate", user.getLastPlaningDate());
         
         // Calculate calendar heatmap data
-        Map<String, Integer> learningHeatmap = new HashMap<>();
-        if (user.getLearningDates() != null) {
+        Map<String, Integer> planingHeatmap = new HashMap<>();
+        if (user.getPlaningDates() != null) {
             // Get dates from the last 6 months
             LocalDate sixMonthsAgo = LocalDate.now().minusMonths(6);
             
-            user.getLearningDates().stream()
+            user.getPlaningDates().stream()
                 .filter(date -> !date.isBefore(sixMonthsAgo))
                 .forEach(date -> {
                     String dateString = date.toString();
-                    learningHeatmap.put(dateString, learningHeatmap.getOrDefault(dateString, 0) + 1);
+                    planingHeatmap.put(dateString, planingHeatmap.getOrDefault(dateString, 0) + 1);
                 });
         }
         
-        response.put("heatmapData", learningHeatmap);
+        response.put("heatmapData", planingHeatmap);
         
         return ResponseEntity.ok(response);
     }

@@ -27,7 +27,7 @@ public interface PlaningRepository extends MongoRepository<PlaningUpdate, String
     // Count updates by category
     long countByUserIdAndCategory(String userId, String category);
     
-    // Get total hours spent on learning
+    // Get total hours spent on planning
     @Query(value = "{ 'userId': ?0 }", 
            fields = "{ 'hoursSpent': 1 }")
     List<PlaningUpdate> findHoursSpentByUserId(String userId);
