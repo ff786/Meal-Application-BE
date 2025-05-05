@@ -27,7 +27,7 @@ public interface LearningUpdateRepository extends MongoRepository<LearningUpdate
     // Count updates by category
     long countByUserIdAndCategory(String userId, String category);
     
-    // Get total hours spent on learning
+    // Get total hours spent on learning meal plan
     @Query(value = "{ 'userId': ?0 }", 
            fields = "{ 'hoursSpent': 1 }")
     List<LearningUpdate> findHoursSpentByUserId(String userId);
