@@ -52,7 +52,7 @@ public class PlaningController {
             Map.of("name", "resourceName", "label", "Meal Name", "type", "text", "required", true),
             Map.of("name", "description", "label", "What did you eat?", "type", "textarea", "required", false),
             Map.of("name", "skillsLearned", "label", "What do you focus on?", "type", "tags", "required", true),
-            Map.of("name", "hoursSpent", "label", "Time Taken to Prepare", "type", "number", "required", true),
+            Map.of("name", "hoursSpent", "label", "Time Taken to Prepare (hour)", "type", "number", "required", true),
             Map.of("name", "difficulty", "label", "Meal Preparation Level", "type", "select", "options", 
                   List.of("BEGINNER", "INTERMEDIATE", "ADVANCED"), "required", true)
         ));
@@ -65,7 +65,7 @@ public class PlaningController {
             Map.of("name", "resourceName", "label", "Recipe Name ", "type", "text", "required", true),
             Map.of("name", "description", "label", "How did you make it?", "type", "textarea", "required", false),
             Map.of("name", "skillsLearned", "label", "What do you focus on?", "type", "tags", "required", true),
-            Map.of("name", "hoursSpent", "label", "Time Spent Cooking", "type", "number", "required", true),
+            Map.of("name", "hoursSpent", "label", "Time Spent Cooking(hour)", "type", "number", "required", true),
             Map.of("name", "difficulty", "label", "Recipe Difficulty Level", "type", "select", "options", 
                   List.of("BEGINNER", "INTERMEDIATE", "ADVANCED"), "required", true)
         ));
@@ -78,7 +78,7 @@ public class PlaningController {
             Map.of("name", "resourceName", "label", "Meal Prep Title", "type", "text", "required", true),
             Map.of("name", "description", "label", "What meals did you prep?", "type", "textarea", "required", true),
             Map.of("name", "skillsLearned", "label", "What do you focus on?", "type", "tags", "required", true),
-            Map.of("name", "hoursSpent", "label", "Total Prep Time", "type", "number", "required", true),
+            Map.of("name", "hoursSpent", "label", "Total Prep Time(hour)", "type", "number", "required", true),
             Map.of("name", "difficulty", "label", "Meal Prep Skill Level", "type", "select", "options", 
                   List.of("BEGINNER", "INTERMEDIATE", "ADVANCED"), "required", true)
         ));
