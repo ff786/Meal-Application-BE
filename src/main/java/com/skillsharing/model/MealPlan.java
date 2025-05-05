@@ -9,7 +9,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 // @Data
 @Document(collection = "learning-plans")
-public class LearningPlan {
+public class MealPlan {
     
     @Id
     private String id;
@@ -25,7 +25,7 @@ public class LearningPlan {
     private List<Week> weeks;
     private String sourcePlanId;
 
-    public LearningPlan() {}
+    public MealPlan() {}
 
     public String getId() {
         return id;

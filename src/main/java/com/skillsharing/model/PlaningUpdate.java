@@ -7,7 +7,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document(collection = "learning_updates")
-public class LearningUpdate {
+public class PlaningUpdate {
     
     @Id
     private String id;
@@ -23,7 +23,7 @@ public class LearningUpdate {
     private String resourceName; // Add missing field
     
     // Constructors
-    public LearningUpdate() {}
+    public PlaningUpdate() {}
     
     // Getters and Setters
     public String getId() {

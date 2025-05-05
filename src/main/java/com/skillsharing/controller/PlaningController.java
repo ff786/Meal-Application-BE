@@ -23,9 +23,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.skillsharing.model.LearningUpdate;
+import com.skillsharing.model.PlaningUpdate;
 import com.skillsharing.model.User;
-import com.skillsharing.repository.LearningUpdateRepository;
+import com.skillsharing.repository.PlaningRepository;
 import com.skillsharing.repository.UserRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -33,10 +33,10 @@ import lombok.RequiredArgsConstructor;
 @RestController
 @RequestMapping("/learning")
 @RequiredArgsConstructor
-public class LearningController {
+public class PlaningController {
     
-    private static final Logger logger = LoggerFactory.getLogger(LearningController.class);
-    private final LearningUpdateRepository learningUpdateRepository;
+    private static final Logger logger = LoggerFactory.getLogger(PlaningController.class);
+    private final PlaningRepository learningUpdateRepository;
     private final UserRepository userRepository;
     
     // Get learning update templates
@@ -88,9 +88,9 @@ public class LearningController {
         return ResponseEntity.ok(response);
     }
     
-    // Add a learning update
+    // Add a mealing update
     @PostMapping("/updates")
-    public ResponseEntity<?> addLearningUpdate(@RequestBody LearningUpdate learningUpdate) {
+    public ResponseEntity<?> addLearningUpdate(@RequestBody PlaningUpdate learningUpdate) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String email = authentication.getName();
         
@@ -122,7 +122,7 @@ public class LearningController {
         updateLearningStreak(currentUser, learningUpdate.getCompletedAt().toLocalDate());
         userRepository.save(currentUser);
         
-        LearningUpdate savedUpdate = learningUpdateRepository.save(learningUpdate);
+        PlaningUpdate savedUpdate = learningUpdateRepository.save(learningUpdate);
         
         Map<String, Object> response = new HashMap<>();
         response.put("learningUpdate", savedUpdate);
@@ -131,7 +131,7 @@ public class LearningController {
         return ResponseEntity.ok(response);
     }
     
-    // Helper method to update learning streak
+    // Helper method to update mealing streak
     private void updateLearningStreak(User user, LocalDate learningDate) {
         // Initialize learning dates set if null
         if (user.getLearningDates() == null) {
@@ -143,13 +143,13 @@ public class LearningController {
             return;
         }
         
-        // Add this date to learning dates
+        // Add this date to mealing dates
         user.getLearningDates().add(learningDate);
         
         LocalDate today = LocalDate.now();
         LocalDate yesterday = today.minusDays(1);
         
-        // If this is the first learning activity or if the last learning was more than a day ago
+        // If this is the first mealing activity or if the last mealing was more than a day ago
         if (user.getLastLearningDate() == null) {
             user.setCurrentStreak(1);
             user.setLastLearningDate(learningDate);
@@ -170,14 +170,14 @@ public class LearningController {
         }
     }
     
-    // Get learning updates for a user
+    // Get mealing updates for a user
     @GetMapping("/updates/user/{userId}")
-    public ResponseEntity<List<LearningUpdate>> getUserLearningUpdates(@PathVariable String userId) {
-        List<LearningUpdate> updates = learningUpdateRepository.findByUserIdOrderByCompletedAtDesc(userId);
+    public ResponseEntity<List<PlaningUpdate>> getUserLearningUpdates(@PathVariable String userId) {
+        List<PlaningUpdate> updates = learningUpdateRepository.findByUserIdOrderByCompletedAtDesc(userId);
         return ResponseEntity.ok(updates);
     }
     
-    // Delete a learning update
+    // Delete a mealing update
     @DeleteMapping("/updates/{updateId}")
     public ResponseEntity<?> deleteLearningUpdate(@PathVariable String updateId) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -186,17 +186,17 @@ public class LearningController {
         User currentUser = userRepository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("User not found"));
         
-        Optional<LearningUpdate> updateOpt = learningUpdateRepository.findById(updateId);
+        Optional<PlaningUpdate> updateOpt = learningUpdateRepository.findById(updateId);
         
         if (updateOpt.isEmpty()) {
             return ResponseEntity.notFound().build();
         }
         
-        LearningUpdate update = updateOpt.get();
+        PlaningUpdate update = updateOpt.get();
         
         // Only allow the owner to delete their updates
         if (!update.getUserId().equals(currentUser.getId())) {
-            return ResponseEntity.status(403).body("You are not authorized to delete this learning update");
+            return ResponseEntity.status(403).body("You are not authorized to delete this mealing plan update");
         }
         
         learningUpdateRepository.delete(update);
@@ -207,11 +207,11 @@ public class LearningController {
         return ResponseEntity.ok(response);
     }
     
-    // Update a learning update
+    // Update a mealing update
     @PutMapping("/updates/{updateId}")
     public ResponseEntity<?> updateLearningUpdate(
             @PathVariable String updateId,
-            @RequestBody LearningUpdate updatedData) {
+            @RequestBody PlaningUpdate updatedData) {
         
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String email = authentication.getName();
@@ -219,17 +219,17 @@ public class LearningController {
         User currentUser = userRepository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("User not found"));
         
-        Optional<LearningUpdate> updateOpt = learningUpdateRepository.findById(updateId);
+        Optional<PlaningUpdate> updateOpt = learningUpdateRepository.findById(updateId);
         
         if (updateOpt.isEmpty()) {
             return ResponseEntity.notFound().build();
         }
         
-        LearningUpdate existingUpdate = updateOpt.get();
+        PlaningUpdate existingUpdate = updateOpt.get();
         
         // Verify ownership
         if (!existingUpdate.getUserId().equals(currentUser.getId())) {
-            return ResponseEntity.status(403).body("You are not authorized to update this learning update");
+            return ResponseEntity.status(403).body("You are not authorized to update this mealing plan update");
         }
         
         // Initialize skills if null
@@ -270,7 +270,7 @@ public class LearningController {
             existingUpdate.setSkillsLearned(updatedData.getSkillsLearned());
         }
         
-        LearningUpdate savedUpdate = learningUpdateRepository.save(existingUpdate);
+        PlaningUpdate savedUpdate = learningUpdateRepository.save(existingUpdate);
         
         Map<String, Object> response = new HashMap<>();
         response.put("learningUpdate", savedUpdate);

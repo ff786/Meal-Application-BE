@@ -7,7 +7,7 @@ import javax.validation.constraints.NotBlank;
 import lombok.Data;
 
 @Data
-public class LearningPlanDTO {
+public class MealPlanDTO {
     private String id;
 
     @NotBlank(message = "Title is required")

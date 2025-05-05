@@ -5,11 +5,11 @@ import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
-import com.skillsharing.dto.LearningPlanDTO;
-import com.skillsharing.model.LearningPlan;
+import com.skillsharing.dto.MealPlanDTO;
+import com.skillsharing.model.MealPlan;
 import com.skillsharing.model.Resource;
 import com.skillsharing.model.Week;
-import com.skillsharing.repository.LearningPlanRepository;
+import com.skillsharing.repository.MealPlanRepository;
 
 import lombok.RequiredArgsConstructor;
 
@@ -17,18 +17,18 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class LearningPlanService {
 
-    private final LearningPlanRepository learningPlanRepository;
+    private final MealPlanRepository learningPlanRepository;
 
-    public List<LearningPlan> getAllLearningPlans() {
+    public List<MealPlan> getAllLearningPlans() {
         return learningPlanRepository.findAll();
     }
 
-    public Optional<LearningPlan> getLearningPlanById(String id) {
+    public Optional<MealPlan> getLearningPlanById(String id) {
         return learningPlanRepository.findById(id);
     }
 
-    public LearningPlan createLearningPlan(LearningPlanDTO learningPlanDTO) {
-        LearningPlan learningPlan = new LearningPlan();
+    public MealPlan createLearningPlan(MealPlanDTO learningPlanDTO) {
+        MealPlan learningPlan = new MealPlan();
         learningPlan.setTitle(learningPlanDTO.getTitle());
         learningPlan.setDescription(learningPlanDTO.getDescription());
 
@@ -61,7 +61,7 @@ public class LearningPlanService {
         return learningPlanRepository.save(learningPlan);
     }
 
-    public LearningPlan updateLearningPlan(String id, LearningPlanDTO learningPlanDTO) {
+    public MealPlan updateLearningPlan(String id, MealPlanDTO learningPlanDTO) {
         return learningPlanRepository.findById(id)
                 .map(existingPlan -> {
                     existingPlan.setResources(
